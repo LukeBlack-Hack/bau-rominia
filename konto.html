@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Anmelden — Bau Rominia</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#inhalt">Zum Inhalt</a>
+    <header class="site-header" data-header>
+      <a class="wordmark" href="index.html">
+        <span class="mark" aria-hidden="true"></span>
+        Bau Rominia
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle>
+        Menü
+      </button>
+      <nav id="nav" class="nav" data-nav>
+        <a href="index.html#leistungen">Leistungen</a>
+        <a href="index.html#anfrage">Anfrage</a>
+        <a class="nav-account" href="konto.html" data-account>Anmelden</a>
+      </nav>
+    </header>
+
+    <main class="page konto" id="inhalt">
+      <div data-gate="out">
+        <p class="kicker">Konto</p>
+        <h1>Anmelden oder Konto erstellen.</h1>
+        <p class="section-lead">
+          Auftraggeber und Fachkräfte melden sich hier an. Das Konto liegt in diesem Browser,
+          das Passwort wird nicht im Klartext gespeichert.
+        </p>
+        <div class="auth-grid">
+          <form class="block auth-card" data-login novalidate>
+            <h2>Anmelden</h2>
+            <label>
+              E-Mail
+              <input name="email" type="email" autocomplete="username" required />
+            </label>
+            <label>
+              Passwort
+              <input name="password" type="password" autocomplete="current-password" required />
+            </label>
+            <div class="form-row">
+              <button class="btn btn-solid" type="submit">Anmelden</button>
+              <p class="form-status" data-status role="status"></p>
+            </div>
+          </form>
+
+          <form class="block auth-card" data-register novalidate>
+            <h2>Konto erstellen</h2>
+            <label>
+              Name
+              <input name="name" autocomplete="name" required />
+            </label>
+            <label>
+              E-Mail
+              <input name="email" type="email" autocomplete="email" required />
+            </label>
+            <fieldset class="role-set">
+              <legend>Ich bin</legend>
+              <label class="choice">
+                <input type="radio" name="rolle" value="auftrag" data-rolle checked />
+                Auftraggeber
+              </label>
+              <label class="choice">
+                <input type="radio" name="rolle" value="fachkraft" data-rolle />
+                Fachkraft
+              </label>
+            </fieldset>
+            <label data-firma>
+              Firma
+              <input name="firma" autocomplete="organization" />
+            </label>
+            <label>
+              Passwort
+              <input name="password" type="password" autocomplete="new-password" minlength="6" required />
+            </label>
+            <label>
+              Passwort wiederholen
+              <input name="password2" type="password" autocomplete="new-password" minlength="6" required />
+            </label>
+            <div class="form-row">
+              <button class="btn btn-solid" type="submit">Konto erstellen</button>
+              <p class="form-status" data-status role="status"></p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div data-gate="in" hidden>
+        <p class="kicker">Angemeldet</p>
+        <h1 data-hello></h1>
+        <p data-role></p>
+        <h2>Deine Anfragen</h2>
+        <ul class="own-list" data-own></ul>
+        <div class="hero-actions">
+          <a class="btn btn-solid" href="index.html#anfrage">Neue Anfrage</a>
+          <button class="btn btn-line" type="button" data-logout>Abmelden</button>
+        </div>
+      </div>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/konto.js"></script>
+  </body>
+</html>
