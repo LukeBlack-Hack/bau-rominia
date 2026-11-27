@@ -17,7 +17,7 @@
     canvas.className = "qr";
     canvas.setAttribute("role", "img");
     canvas.setAttribute("aria-label", "QR-Code für die Authenticator-App");
-    const url = `otpauth://totp/${encodeURIComponent("Bau Rominia")}:${encodeURIComponent(email)}?secret=${geheimnis}&issuer=${encodeURIComponent("Bau Rominia")}`;
+    const url = `otpauth://totp/${encodeURIComponent("EuroGleis SRL")}:${encodeURIComponent(email)}?secret=${geheimnis}&issuer=${encodeURIComponent("EuroGleis SRL")}`;
     const code = qrcode(0, "M");
     code.addData(url, "Byte");
     code.make();

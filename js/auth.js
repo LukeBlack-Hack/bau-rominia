@@ -3,7 +3,7 @@ const SESSION_KEY = "bau-rominia-session";
 
 const INTERN = {
   dev: ["xxlukexxhdhd@gmail.com"],
-  besitzer: [],
+  besitzer: ["contact.eurogleis@gmail.com"],
 };
 
 const internRolle = (email) => {
