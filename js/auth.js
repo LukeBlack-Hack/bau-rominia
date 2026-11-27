@@ -44,6 +44,8 @@ const saveSession = (user) => {
 
 const istBesitzer = () => internRolle(session()?.email) !== null;
 
+const istDev = () => internRolle(session()?.email) === "dev";
+
 const paintAccount = () => {
   const current = session();
   document.querySelectorAll("[data-account]").forEach((link) => {
@@ -52,6 +54,9 @@ const paintAccount = () => {
   });
   document.querySelectorAll("[data-intern]").forEach((link) => {
     link.hidden = !istBesitzer();
+  });
+  document.querySelectorAll("[data-dev]").forEach((link) => {
+    link.hidden = !istDev();
   });
 };
 
@@ -70,6 +75,7 @@ const register = async ({ name, email, password, rolle, firma }) => {
     email: normalized,
     rolle: fest || (rolle === "fachkraft" ? "fachkraft" : "auftrag"),
     firma: (firma || "").trim(),
+    seit: new Date().toISOString(),
     pass: await hashPassword(password),
   };
   list.push(user);
@@ -99,10 +105,24 @@ const login = async ({ email, password }) => {
   return user;
 };
 
+const resetPassword = async ({ email, password }) => {
+  const normalized = String(email || "").trim().toLowerCase();
+  const list = users();
+  const index = list.findIndex((entry) => entry.email === normalized);
+  if (index < 0) {
+    throw new Error("Für diese E-Mail gibt es in diesem Browser kein Konto.");
+  }
+  if (String(password || "").length < 6) {
+    throw new Error("Das Passwort braucht mindestens 6 Zeichen.");
+  }
+  list[index].pass = await hashPassword(password);
+  localStorage.setItem(USERS_KEY, JSON.stringify(list));
+};
+
 const logout = () => {
   localStorage.removeItem(SESSION_KEY);
   paintAccount();
 };
 
-window.BauRominia = { session, register, login, logout, paintAccount, istBesitzer };
+window.BauRominia = { session, register, login, logout, resetPassword, paintAccount, istBesitzer, istDev };
 paintAccount();

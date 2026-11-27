@@ -28,6 +28,7 @@
         <a href="index.html#anfrage">Anfrage</a>
         <a href="anfragen.html" data-intern hidden>Anfragen</a>
         <a href="kalkulation.html" data-intern hidden>Kalkulation</a>
+        <a href="konten.html" data-dev hidden>Konten</a>
         <a class="nav-account" href="konto.html" data-account>Anmelden</a>
       </nav>
     </header>
@@ -52,14 +53,40 @@
               E-Mail
               <input name="email" type="email" autocomplete="username" required />
             </label>
-            <label>
+              <label>
               Passwort
               <input name="password" type="password" autocomplete="current-password" required />
             </label>
+            <button class="auth-forget" type="button" data-auth-tab="reset">Passwort vergessen</button>
             <div class="form-row">
               <button class="btn btn-solid" type="submit">Anmelden</button>
               <p class="form-status" data-status role="status"></p>
             </div>
+          </form>
+
+          <form class="auth-card" data-auth-pane="reset" data-reset hidden novalidate>
+            <p class="kicker">Neues Passwort</p>
+            <h2>Passwort vergessen.</h2>
+            <p class="hint">
+              Nur auf diesem Computer. Es geht keine E-Mail raus. Die Adresse muss hier schon ein Konto haben.
+            </p>
+            <label>
+              E-Mail
+              <input name="email" type="email" autocomplete="username" required />
+            </label>
+            <label>
+              Neues Passwort
+              <input name="password" type="password" autocomplete="new-password" minlength="6" required />
+            </label>
+            <label>
+              Passwort wiederholen
+              <input name="password2" type="password" autocomplete="new-password" minlength="6" required />
+            </label>
+            <div class="form-row">
+              <button class="btn btn-solid" type="submit">Passwort speichern</button>
+              <button class="btn btn-line" type="button" data-auth-tab="login">Zurück</button>
+            </div>
+            <p class="form-status" data-status role="status"></p>
           </form>
 
           <form class="auth-card" data-auth-pane="register" data-register hidden novalidate>
@@ -113,6 +140,7 @@
         <div class="hero-actions">
           <a class="btn btn-solid" href="anfragen.html" data-intern hidden>Alle Anfragen</a>
           <a class="btn btn-line" href="kalkulation.html" data-intern hidden>Kalkulation</a>
+          <a class="btn btn-line" href="konten.html" data-dev hidden>Konten</a>
           <a class="btn btn-line" href="index.html#anfrage">Neue Anfrage</a>
           <button class="btn btn-line" type="button" data-logout>Abmelden</button>
         </div>

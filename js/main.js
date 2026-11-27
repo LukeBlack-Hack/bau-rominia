@@ -33,6 +33,33 @@ document.querySelectorAll(".auth-panel").forEach((panel) => {
   });
 });
 
+document.querySelectorAll("[data-reset]").forEach((resetForm) => {
+  resetForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const status = resetForm.querySelector("[data-status]");
+    const show = (text, isError) => {
+      status.textContent = text;
+      status.classList.toggle("is-error", Boolean(isError));
+    };
+    if (!resetForm.checkValidity()) {
+      resetForm.reportValidity();
+      return;
+    }
+    const data = Object.fromEntries(new FormData(resetForm).entries());
+    if (data.password !== data.password2) {
+      show("Die beiden Passwörter sind nicht gleich.", true);
+      return;
+    }
+    try {
+      await window.BauRominia.resetPassword(data);
+      resetForm.reset();
+      show("Neues Passwort ist gespeichert. Du kannst dich jetzt anmelden.", false);
+    } catch (error) {
+      show(error.message, true);
+    }
+  });
+});
+
 nav?.addEventListener("click", (event) => {
   if (event.target.closest("a")) {
     nav.classList.remove("is-open");
