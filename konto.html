@@ -26,6 +26,8 @@
       <nav id="nav" class="nav" data-nav>
         <a href="index.html#leistungen">Leistungen</a>
         <a href="index.html#anfrage">Anfrage</a>
+        <a href="anfragen.html" data-intern hidden>Anfragen</a>
+        <a href="kalkulation.html" data-intern hidden>Kalkulation</a>
         <a class="nav-account" href="konto.html" data-account>Anmelden</a>
       </nav>
     </header>
@@ -33,14 +35,19 @@
     <main class="page konto" id="inhalt">
       <div data-gate="out">
         <p class="kicker">Konto</p>
-        <h1>Anmelden oder Konto erstellen.</h1>
+        <h1>Dein Konto.</h1>
         <p class="section-lead">
           Auftraggeber und Fachkräfte melden sich hier an. Das Konto liegt in diesem Browser,
           das Passwort wird nicht im Klartext gespeichert.
         </p>
-        <div class="auth-grid">
-          <form class="block auth-card" data-login novalidate>
-            <h2>Anmelden</h2>
+        <div class="auth-panel">
+          <div class="switch" role="tablist" aria-label="Konto">
+            <button type="button" class="is-active" role="tab" aria-selected="true" data-auth-tab="login">Anmelden</button>
+            <button type="button" role="tab" aria-selected="false" data-auth-tab="register">Konto erstellen</button>
+          </div>
+          <form class="auth-card" data-auth-pane="login" data-login novalidate>
+            <p class="kicker">Schon dabei</p>
+            <h2>Willkommen zurück.</h2>
             <label>
               E-Mail
               <input name="email" type="email" autocomplete="username" required />
@@ -55,8 +62,9 @@
             </div>
           </form>
 
-          <form class="block auth-card" data-register novalidate>
-            <h2>Konto erstellen</h2>
+          <form class="auth-card" data-auth-pane="register" data-register hidden novalidate>
+            <p class="kicker">Neu hier</p>
+            <h2>Konto erstellen.</h2>
             <label>
               Name
               <input name="name" autocomplete="name" required />
@@ -94,16 +102,47 @@
             </div>
           </form>
         </div>
+        <details class="besitzer-box" id="besitzer">
+          <summary>Besitzer</summary>
+          <p>
+            Nur mit einer hinterlegten E-Mail. Entwicklung und Besitzer sehen danach
+            Anfragen und Kalkulation. Andere Adressen bleiben Auftraggeber oder Fachkraft.
+          </p>
+          <form data-besitzer novalidate>
+            <label>
+              Name
+              <input name="name" autocomplete="name" required />
+            </label>
+            <label>
+              E-Mail
+              <input name="email" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              Passwort
+              <input name="password" type="password" autocomplete="new-password" minlength="6" required />
+            </label>
+            <label>
+              Passwort wiederholen
+              <input name="password2" type="password" autocomplete="new-password" minlength="6" required />
+            </label>
+            <div class="form-row">
+              <button class="btn btn-solid" type="submit">Besitzer-Konto erstellen</button>
+              <p class="form-status" data-status role="status"></p>
+            </div>
+          </form>
+        </details>
       </div>
 
       <div data-gate="in" hidden>
         <p class="kicker">Angemeldet</p>
         <h1 data-hello></h1>
         <p data-role></p>
-        <h2>Deine Anfragen</h2>
+        <h2 data-anfragen-titel>Deine Anfragen</h2>
         <ul class="own-list" data-own></ul>
         <div class="hero-actions">
-          <a class="btn btn-solid" href="index.html#anfrage">Neue Anfrage</a>
+          <a class="btn btn-solid" href="anfragen.html" data-intern hidden>Alle Anfragen</a>
+          <a class="btn btn-line" href="kalkulation.html" data-intern hidden>Kalkulation</a>
+          <a class="btn btn-line" href="index.html#anfrage">Neue Anfrage</a>
           <button class="btn btn-line" type="button" data-logout>Abmelden</button>
         </div>
       </div>

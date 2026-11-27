@@ -33,6 +33,8 @@
         <a href="#ablauf">Ablauf</a>
         <a href="#fuer-wen">Für wen</a>
         <a href="#anfrage">Anfrage</a>
+        <a href="anfragen.html" data-intern hidden>Anfragen</a>
+        <a href="kalkulation.html" data-intern hidden>Kalkulation</a>
         <a class="nav-account" href="konto.html" data-account>Anmelden</a>
       </nav>
     </header>
@@ -198,15 +200,84 @@
         <div class="section-head">
           <p class="kicker">04 — Anfrage</p>
           <h2>Sag uns, was die Baustelle braucht.</h2>
-          <p class="section-lead">Die Anfrage bleibt vorerst in diesem Browser. Versand und Übersicht bauen wir als Nächstes.</p>
+          <p class="section-lead">
+            Erst anmelden oder ein Konto erstellen. Ohne Konto geht keine Anfrage raus.
+            Sie bleibt in diesem Browser, der Besitzer sieht sie auf der Anfragen-Seite.
+          </p>
         </div>
 
-        <form class="form" data-form novalidate>
+        <div class="anfrage-gate" data-anfrage-gate>
+          <div class="auth-panel">
+            <div class="switch" role="tablist" aria-label="Konto">
+              <button type="button" class="is-active" role="tab" aria-selected="true" data-auth-tab="login">Anmelden</button>
+              <button type="button" role="tab" aria-selected="false" data-auth-tab="register">Konto erstellen</button>
+            </div>
+            <form class="auth-card" data-auth-pane="login" data-anfrage-login novalidate>
+              <p class="kicker">Schon dabei</p>
+              <h2>Willkommen zurück.</h2>
+              <label>
+                E-Mail
+                <input name="email" type="email" autocomplete="username" required />
+              </label>
+              <label>
+                Passwort
+                <input name="password" type="password" autocomplete="current-password" required />
+              </label>
+              <div class="form-row">
+                <button class="btn btn-solid" type="submit">Anmelden</button>
+                <p class="form-status" data-status role="status"></p>
+              </div>
+            </form>
+
+            <form class="auth-card" data-auth-pane="register" data-anfrage-register hidden novalidate>
+              <p class="kicker">Neu hier</p>
+              <h2>Konto erstellen.</h2>
+              <label>
+                Name
+                <input name="name" autocomplete="name" required />
+              </label>
+              <label>
+                E-Mail
+                <input name="email" type="email" autocomplete="email" required />
+              </label>
+              <fieldset class="role-set">
+                <legend>Ich bin</legend>
+                <label class="choice">
+                  <input type="radio" name="rolle" value="auftrag" data-anfrage-rolle checked />
+                  Auftraggeber
+                </label>
+                <label class="choice">
+                  <input type="radio" name="rolle" value="fachkraft" data-anfrage-rolle />
+                  Fachkraft
+                </label>
+              </fieldset>
+              <label data-anfrage-firma>
+                Firma
+                <input name="firma" autocomplete="organization" />
+              </label>
+              <label>
+                Passwort
+                <input name="password" type="password" autocomplete="new-password" minlength="6" required />
+              </label>
+              <label>
+                Passwort wiederholen
+                <input name="password2" type="password" autocomplete="new-password" minlength="6" required />
+              </label>
+              <div class="form-row">
+                <button class="btn btn-solid" type="submit">Konto erstellen</button>
+                <p class="form-status" data-status role="status"></p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <form class="form" data-form hidden novalidate>
           <div class="switch" role="tablist" aria-label="Art der Anfrage">
             <button type="button" class="is-active" role="tab" aria-selected="true" data-tab="auftrag">Auftraggeber</button>
             <button type="button" role="tab" aria-selected="false" data-tab="fachkraft">Fachkraft</button>
           </div>
           <input type="hidden" name="art" value="auftrag" data-art />
+          <p class="anfrage-wer" data-anfrage-wer></p>
 
           <fieldset class="block">
             <legend>01 Kontakt</legend>
@@ -269,12 +340,20 @@
                 </select>
               </label>
               <label data-only="auftrag">
-                Personen benötigt
+                Helfer
                 <input name="personen" type="number" min="1" max="200" inputmode="numeric" placeholder="z. B. 8" required />
               </label>
               <label data-only="auftrag">
+                Vorarbeiter
+                <input name="vorarbeiter" type="number" min="0" max="40" inputmode="numeric" placeholder="z. B. 1" />
+              </label>
+              <label data-only="auftrag">
+                Stunden pro Tag
+                <input name="stunden" type="number" min="1" max="24" step="0.5" inputmode="decimal" placeholder="8" />
+              </label>
+              <label data-only="auftrag">
                 Funktion
-                <input name="funktion" placeholder="z. B. Helfer, Vorarbeiter" />
+                <input name="funktion" placeholder="z. B. Verkleben, Stopfen" />
               </label>
               <label data-only="auftrag">
                 Start
@@ -292,7 +371,16 @@
                   <option>Tag</option>
                   <option>Spät</option>
                   <option>Nacht</option>
+                  <option>Wochenende</option>
                   <option>Nach Absprache</option>
+                </select>
+              </label>
+              <label data-only="auftrag">
+                Unterkunft
+                <select name="unterkunft">
+                  <option value="">Bitte wählen</option>
+                  <option value="nein">Nein</option>
+                  <option value="ja">Ja, Übernachtung nötig</option>
                 </select>
               </label>
               <label data-only="fachkraft" hidden>
@@ -351,6 +439,8 @@
       </div>
       <p class="fine">
         Entwurf. Anschrift, Telefon und Handelsregister tragen wir ein, sobald sie feststehen.
+        <a href="anfragen.html" data-intern hidden>Anfragen</a>
+        <a href="kalkulation.html" data-intern hidden>Kalkulation</a>
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
       </p>

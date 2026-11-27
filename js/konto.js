@@ -18,7 +18,17 @@ const showSession = () => {
   if (!loggedIn) return;
 
   gateIn.querySelector("[data-hello]").textContent = current.name;
-  const rolle = current.rolle === "fachkraft" ? "Fachkraft" : "Auftraggeber";
+  const rollen = {
+    fachkraft: "Fachkraft",
+    besitzer: "Besitzer",
+    dev: "Entwicklung",
+    auftrag: "Auftraggeber",
+  };
+  const rolle = rollen[current.rolle] || "Auftraggeber";
+  const intern = current.rolle === "besitzer" || current.rolle === "dev";
+  gateIn.querySelector("[data-anfragen-titel]").textContent = intern
+    ? "Anfragen mit diesem Konto"
+    : "Deine Anfragen";
   const firma = current.firma ? ` · ${current.firma}` : "";
   gateIn.querySelector("[data-role]").textContent = `${rolle}${firma} · ${current.email}`;
 
@@ -83,6 +93,7 @@ registerForm.addEventListener("submit", async (event) => {
     return;
   }
   const data = Object.fromEntries(new FormData(registerForm).entries());
+  data.rolle = data.rolle === "fachkraft" ? "fachkraft" : "auftrag";
   if (data.password.length < 6) {
     setStatus(registerForm, "Das Passwort braucht mindestens 6 Zeichen.", true);
     return;
@@ -105,6 +116,38 @@ registerForm.addEventListener("submit", async (event) => {
 gateIn.querySelector("[data-logout]").addEventListener("click", () => {
   auth.logout();
   showSession();
+});
+
+const besitzerForm = document.querySelector("[data-besitzer]");
+const besitzerBox = document.querySelector("#besitzer");
+if (besitzerBox && location.hash === "#besitzer") {
+  besitzerBox.open = true;
+}
+
+besitzerForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!besitzerForm.checkValidity()) {
+    besitzerForm.reportValidity();
+    return;
+  }
+  const data = Object.fromEntries(new FormData(besitzerForm).entries());
+  if (data.password.length < 6) {
+    setStatus(besitzerForm, "Das Passwort braucht mindestens 6 Zeichen.", true);
+    return;
+  }
+  if (data.password !== data.password2) {
+    setStatus(besitzerForm, "Die beiden Passwörter sind nicht gleich.", true);
+    return;
+  }
+  try {
+    await auth.register({ ...data, rolle: "besitzer", firma: "" });
+    auth.paintAccount();
+    besitzerForm.reset();
+    setStatus(besitzerForm, "", false);
+    showSession();
+  } catch (error) {
+    setStatus(besitzerForm, error.message, true);
+  }
 });
 
 showSession();

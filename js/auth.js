@@ -1,6 +1,18 @@
 const USERS_KEY = "bau-rominia-konten";
 const SESSION_KEY = "bau-rominia-session";
 
+const INTERN = {
+  dev: ["xxlukexxhdhd@gmail.com"],
+  besitzer: [],
+};
+
+const internRolle = (email) => {
+  const normalized = String(email || "").trim().toLowerCase();
+  if (INTERN.dev.includes(normalized)) return "dev";
+  if (INTERN.besitzer.includes(normalized)) return "besitzer";
+  return null;
+};
+
 const readJson = (key, fallback) => {
   try {
     return JSON.parse(localStorage.getItem(key) || "") ?? fallback;
@@ -30,11 +42,16 @@ const saveSession = (user) => {
   );
 };
 
+const istBesitzer = () => internRolle(session()?.email) !== null;
+
 const paintAccount = () => {
   const current = session();
   document.querySelectorAll("[data-account]").forEach((link) => {
     link.textContent = current?.name || "Anmelden";
     link.href = "konto.html";
+  });
+  document.querySelectorAll("[data-intern]").forEach((link) => {
+    link.hidden = !istBesitzer();
   });
 };
 
@@ -44,11 +61,15 @@ const register = async ({ name, email, password, rolle, firma }) => {
   if (list.some((user) => user.email === normalized)) {
     throw new Error("Für diese E-Mail gibt es schon ein Konto.");
   }
+  const fest = internRolle(normalized);
+  if (rolle === "besitzer" && !fest) {
+    throw new Error("Diese E-Mail ist nicht als Besitzer hinterlegt.");
+  }
   const user = {
     name: name.trim(),
     email: normalized,
-    rolle,
-    firma: firma.trim(),
+    rolle: fest || (rolle === "fachkraft" ? "fachkraft" : "auftrag"),
+    firma: (firma || "").trim(),
     pass: await hashPassword(password),
   };
   list.push(user);
@@ -64,6 +85,16 @@ const login = async ({ email, password }) => {
   if (!user || user.pass !== pass) {
     throw new Error("E-Mail oder Passwort stimmt nicht.");
   }
+  const fest = internRolle(user.email);
+  if (fest && user.rolle !== fest) {
+    user.rolle = fest;
+    const list = users();
+    const index = list.findIndex((entry) => entry.email === user.email);
+    if (index >= 0) {
+      list[index].rolle = fest;
+      localStorage.setItem(USERS_KEY, JSON.stringify(list));
+    }
+  }
   saveSession(user);
   return user;
 };
@@ -73,5 +104,5 @@ const logout = () => {
   paintAccount();
 };
 
-window.BauRominia = { session, register, login, logout, paintAccount };
+window.BauRominia = { session, register, login, logout, paintAccount, istBesitzer };
 paintAccount();

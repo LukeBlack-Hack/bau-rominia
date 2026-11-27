@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kalkulation — Bau Rominia</title>
+    <meta
+      name="description"
+      content="Interne Kalkulation für den Besitzer: was ein Einsatz kostet und was dem Betrieb bleibt."
+    />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#inhalt">Zum Inhalt</a>
+    <header class="site-header" data-header>
+      <a class="wordmark" href="index.html">
+        <span class="mark" aria-hidden="true"></span>
+        Bau Rominia
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle>
+        Menü
+      </button>
+      <nav id="nav" class="nav" data-nav>
+        <a href="index.html#leistungen">Leistungen</a>
+        <a href="index.html#anfrage">Anfrage</a>
+        <a href="anfragen.html" data-intern hidden>Anfragen</a>
+        <a href="kalkulation.html" data-intern hidden aria-current="page">Kalkulation</a>
+        <a class="nav-account" href="konto.html" data-account>Anmelden</a>
+      </nav>
+    </header>
+
+    <main class="page page-calc" id="inhalt">
+      <div data-lock>
+        <p class="kicker">Intern</p>
+        <h1>Nur für den Besitzer.</h1>
+        <p class="section-lead">
+          Die Kalkulation ist mit der Seite verbunden, im Menü sieht sie aber nur der Besitzer.
+        </p>
+        <a class="btn btn-solid" href="konto.html#besitzer">Als Besitzer anmelden</a>
+      </div>
+      <div data-office hidden>
+      <p class="kicker">Intern · Besitzer</p>
+      <h1>Kalkulation.</h1>
+      <p class="section-lead">
+        Der Stundenpreis entsteht aus Lohn, Urlaub, Krankheit, Abgaben, Fahrzeug, PSA und Betrieb.
+        Der Verkaufspreis ist dieser Preis plus Aufschlag.
+      </p>
+
+      <div class="calc-layout">
+        <form class="form calc-form" data-calc novalidate>
+          <fieldset class="block">
+            <legend>Einsatz</legend>
+            <div class="fields">
+              <label class="span-2">
+                Baustelle
+                <input name="baustelle" value="Köln-Süd" autocomplete="off" />
+              </label>
+              <label class="span-2">
+                Gewerk
+                <select name="gewerk">
+                  <option>Kammersteine verkleben</option>
+                  <option>Gleisarbeiten</option>
+                  <option>Schotter</option>
+                  <option>Rheda City</option>
+                  <option>Weitere Arbeiten am Gleis</option>
+                </select>
+              </label>
+              <label>
+                Helfer
+                <input name="helfer" type="number" min="0" max="200" step="1" inputmode="numeric" value="8" />
+              </label>
+              <label>
+                Vorarbeiter
+                <input name="vorarbeiter" type="number" min="0" max="40" step="1" inputmode="numeric" value="1" />
+              </label>
+              <label>
+                Gearbeitet h
+                <input name="stunden" type="number" min="0" max="24" step="0.5" inputmode="decimal" value="8" />
+              </label>
+              <label>
+                Tage Tag
+                <input name="tageTag" type="number" min="0" max="400" step="0.5" inputmode="decimal" value="5" />
+              </label>
+              <label>
+                Tage Nacht
+                <input name="tageNacht" type="number" min="0" max="400" step="0.5" inputmode="decimal" value="0" />
+              </label>
+              <label>
+                Tage Wochenende
+                <input name="tageWochenende" type="number" min="0" max="400" step="0.5" inputmode="decimal" value="0" />
+              </label>
+              <label>
+                Nächte
+                <input name="naechte" type="number" min="0" max="400" step="1" inputmode="numeric" value="0" />
+              </label>
+              <p class="calc-note span-2">Tag, Nacht und Wochenende können zusammen laufen. Der Zuschlag gilt nur für diese Tage. Unter 9 Stunden werden trotzdem 9 Stunden bezahlt.</p>
+            </div>
+          </fieldset>
+
+          <fieldset class="block">
+            <legend>Lohn und Aufschlag</legend>
+            <div class="fields">
+              <label>
+                Helfer brutto € / h
+                <input name="lohnHelfer" type="number" min="0" step="0.01" inputmode="decimal" value="18" />
+              </label>
+              <label>
+                Vorarbeiter brutto € / h
+                <input name="lohnVorarbeiter" type="number" min="0" step="0.01" inputmode="decimal" value="24" />
+              </label>
+              <label>
+                Aufschlag %
+                <input name="aufschlag" type="number" min="0" max="300" step="1" inputmode="numeric" value="20" />
+              </label>
+              <label>
+                Kilometer, hin und zurück
+                <input name="kilometer" type="number" min="0" step="1" inputmode="numeric" value="0" />
+              </label>
+              <label>
+                Fahrten
+                <input name="fahrten" type="number" min="0" step="1" inputmode="numeric" value="1" />
+              </label>
+              <label>
+                Unterkunft € / Nacht
+                <input name="unterkunft" type="number" min="0" step="0.01" inputmode="decimal" value="0" />
+              </label>
+            </div>
+            <p class="calc-note">20 % Aufschlag heißt: Verkauf = Kosten × 1,20. Das sind nicht 20 % vom Umsatz.</p>
+            <label class="choice">
+              <input name="mwst" type="checkbox" />
+              19 % MwSt. anzeigen
+            </label>
+          </fieldset>
+
+          <fieldset class="block">
+            <legend>Weitere Leute</legend>
+            <p class="fest-lead">Wer einen anderen Bruttolohn hat. Stunden und Tage kommen aus dem Einsatz.</p>
+            <div data-leute></div>
+            <button class="btn btn-line" type="button" data-person-add>Person hinzufügen</button>
+          </fieldset>
+
+          <fieldset class="block fest-block">
+            <legend>Kommt immer dazu</legend>
+            <ul class="fest-liste">
+              <li><strong>30 Tage Urlaub, 10 Feiertage, 10 Ausfall</strong> von 261 Werktagen. Der Stundenpreis teilt die Jahreskosten nur durch die übrigen Tage.</li>
+              <li><strong>26 % Arbeitgeberkosten</strong> auf dem Bruttolohn: Krankenkasse 8, Pflege 2, Rente 9, Arbeitslose 1, Berufsgenossenschaft 4, Umlagen 2. Lohnsteuer steckt im Bruttolohn.</li>
+              <li><strong>Fahrzeug 450 € im Monat</strong> plus <strong>0,20 € je Kilometer</strong>. Leasing und Abschreibung nicht doppelt.</li>
+              <li><strong>PSA 400 € im Jahr</strong> je Person. <strong>Betrieb 250 € im Monat</strong> je Person.</li>
+              <li><strong>Nacht 25 %, Wochenende 50 %</strong> nur auf die Personalkosten.</li>
+            </ul>
+          </fieldset>
+
+          <fieldset class="block">
+            <legend>Eigene Positionen</legend>
+            <div class="extra-liste" data-extras></div>
+            <button class="btn btn-line" type="button" data-extra-add>Position hinzufügen</button>
+            <input type="hidden" name="sonstigesName" value="" />
+            <input type="hidden" name="sonstiges" value="0" />
+            <input type="hidden" name="sonstigesKosten" value="0" />
+          </fieldset>
+
+          <div class="form-row">
+            <button class="btn btn-solid" type="submit">Kalkulation merken</button>
+            <button class="btn btn-line" type="button" data-print>Drucken</button>
+            <button class="btn btn-line" type="button" data-print-kunde>Angebot drucken</button>
+            <button class="btn btn-line" type="button" data-an-anfrage>An die Anfrage</button>
+            <p class="form-status" data-status role="status"></p>
+          </div>
+          <p class="calc-note">Das Angebot wird an die Anfrage in diesem Browser gehängt. Es geht keine E-Mail raus.</p>
+          <div class="anfrage-wahl" data-anfrage-wahl hidden>
+            <p class="calc-note">Auftraggeber-Anfrage wählen</p>
+            <div class="anfrage-wahl-liste" data-anfrage-liste></div>
+          </div>
+        </form>
+
+        <aside class="calc-side" aria-live="polite">
+          <article class="sheet sheet-intern">
+            <div class="ticket-top">
+              <span>Kalkulationsblatt</span>
+              <span data-blatt-ort>Köln-Süd</span>
+            </div>
+            <p class="sheet-meta" data-blatt-fuer hidden></p>
+            <p class="sheet-meta" data-blatt-hinweis hidden></p>
+            <p class="sheet-meta" data-satz-info></p>
+            <div class="sheet-kpis">
+              <div>
+                <span>Angebot netto</span>
+                <strong data-netto>0,00&nbsp;€</strong>
+              </div>
+              <div data-mwst-row hidden>
+                <span>MwSt. 19 %</span>
+                <strong data-mwst>0,00&nbsp;€</strong>
+              </div>
+              <div data-brutto-row hidden>
+                <span>Brutto</span>
+                <strong data-brutto>0,00&nbsp;€</strong>
+              </div>
+              <div class="kpi-intern">
+                <span>Kosten</span>
+                <strong data-kosten>0,00&nbsp;€</strong>
+              </div>
+              <div class="kpi-intern">
+                <span>Bleibt</span>
+                <strong data-uebrig>0,00&nbsp;€</strong>
+                <em data-marge>0 %</em>
+              </div>
+            </div>
+            <div class="sheet-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pos</th>
+                    <th>Bezeichnung</th>
+                    <th class="num">Menge</th>
+                    <th class="num">Verkauf</th>
+                    <th class="num kosten-spalte">Kosten</th>
+                  </tr>
+                </thead>
+                <tbody data-positionen></tbody>
+              </table>
+            </div>
+          </article>
+          <article class="sheet sheet-kunde" data-kundenblatt>
+            <div class="ticket-top">
+              <span>Angebot</span>
+              <span data-kunde-ort>Köln-Süd</span>
+            </div>
+            <p class="sheet-meta" data-kunde-fuer hidden></p>
+            <p class="sheet-meta" data-kunde-gewerk></p>
+            <div class="sheet-kpis sheet-kpis-kunde">
+              <div>
+                <span>Angebot netto</span>
+                <strong data-kunde-netto>0,00&nbsp;€</strong>
+              </div>
+              <div data-kunde-mwst-row hidden>
+                <span>MwSt. 19 %</span>
+                <strong data-kunde-mwst>0,00&nbsp;€</strong>
+              </div>
+              <div data-kunde-brutto-row hidden>
+                <span>Brutto</span>
+                <strong data-kunde-brutto>0,00&nbsp;€</strong>
+              </div>
+            </div>
+            <div class="sheet-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pos</th>
+                    <th>Bezeichnung</th>
+                    <th class="num">Menge</th>
+                    <th class="num">Betrag</th>
+                  </tr>
+                </thead>
+                <tbody data-kunde-positionen></tbody>
+              </table>
+            </div>
+          </article>
+        </aside>
+      </div>
+
+      <section class="calc-saved">
+        <h2>Gemerkte Einsätze</h2>
+        <ul class="own-list" data-saved></ul>
+      </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Bau Rominia</strong>
+        <p>Hilfen für Kammersteine, Gleisarbeiten, Schotter und Rheda City.</p>
+      </div>
+      <p class="fine">
+        <a href="anfragen.html" data-intern hidden>Anfragen</a>
+        <a href="kalkulation.html" data-intern hidden>Kalkulation</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </p>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/kalkulation.js"></script>
+  </body>
+</html>

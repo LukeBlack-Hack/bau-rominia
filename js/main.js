@@ -16,6 +16,23 @@ toggle?.addEventListener("click", () => {
   toggle.textContent = open ? "Schließen" : "Menü";
 });
 
+document.querySelectorAll(".auth-panel").forEach((panel) => {
+  const tabs = [...panel.querySelectorAll("[data-auth-tab]")];
+  const showAuth = (name) => {
+    tabs.forEach((tab) => {
+      const active = tab.dataset.authTab === name;
+      tab.classList.toggle("is-active", active);
+      tab.setAttribute("aria-selected", String(active));
+    });
+    panel.querySelectorAll("[data-auth-pane]").forEach((pane) => {
+      pane.hidden = pane.dataset.authPane !== name;
+    });
+  };
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => showAuth(tab.dataset.authTab));
+  });
+});
+
 nav?.addEventListener("click", (event) => {
   if (event.target.closest("a")) {
     nav.classList.remove("is-open");
@@ -64,18 +81,98 @@ document.querySelectorAll("[data-audience]").forEach((link) => {
   link.addEventListener("click", () => setAudience(link.dataset.audience));
 });
 
-const currentSession = window.BauRominia?.session();
-if (currentSession && form) {
-  setAudience(currentSession.rolle === "fachkraft" ? "fachkraft" : "auftrag");
+const anfrageGate = document.querySelector("[data-anfrage-gate]");
+const anfrageLogin = document.querySelector("[data-anfrage-login]");
+const anfrageRegister = document.querySelector("[data-anfrage-register]");
+const anfrageWer = document.querySelector("[data-anfrage-wer]");
+
+const syncInquiry = (current) => {
+  if (!form || !anfrageGate) return;
+  const loggedIn = Boolean(current);
+  anfrageGate.hidden = loggedIn;
+  form.hidden = !loggedIn;
+  if (!loggedIn) return;
+  setAudience(current.rolle === "fachkraft" ? "fachkraft" : "auftrag");
   const name = form.querySelector("[name='name']");
   const email = form.querySelector("[name='email']");
-  if (name && !name.value) name.value = currentSession.name;
-  if (email && !email.value) email.value = currentSession.email;
-}
+  if (name) name.value = current.name;
+  if (email) {
+    email.value = current.email;
+    email.readOnly = true;
+  }
+  if (anfrageWer) anfrageWer.textContent = `Angemeldet als ${current.name} · ${current.email}`;
+};
+
+const authStatus = (target, text, isError) => {
+  const status = target.querySelector("[data-status]");
+  if (!status) return;
+  status.textContent = text;
+  status.classList.toggle("is-error", Boolean(isError));
+};
+
+anfrageRegister?.querySelectorAll("[data-anfrage-rolle]").forEach((input) => {
+  input.addEventListener("change", () => {
+    const firma = anfrageRegister.querySelector("[data-anfrage-firma]");
+    const show = anfrageRegister.querySelector("[data-anfrage-rolle]:checked").value === "auftrag";
+    firma.hidden = !show;
+    firma.querySelector("input").disabled = !show;
+  });
+});
+
+anfrageLogin?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!anfrageLogin.checkValidity()) {
+    anfrageLogin.reportValidity();
+    return;
+  }
+  try {
+    const user = await window.BauRominia.login(Object.fromEntries(new FormData(anfrageLogin).entries()));
+    window.BauRominia.paintAccount();
+    anfrageLogin.reset();
+    authStatus(anfrageLogin, "", false);
+    syncInquiry(user);
+  } catch (error) {
+    authStatus(anfrageLogin, error.message, true);
+  }
+});
+
+anfrageRegister?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!anfrageRegister.checkValidity()) {
+    anfrageRegister.reportValidity();
+    return;
+  }
+  const data = Object.fromEntries(new FormData(anfrageRegister).entries());
+  data.rolle = data.rolle === "fachkraft" ? "fachkraft" : "auftrag";
+  if (data.password.length < 6) {
+    authStatus(anfrageRegister, "Das Passwort braucht mindestens 6 Zeichen.", true);
+    return;
+  }
+  if (data.password !== data.password2) {
+    authStatus(anfrageRegister, "Die beiden Passwörter sind nicht gleich.", true);
+    return;
+  }
+  try {
+    const user = await window.BauRominia.register(data);
+    window.BauRominia.paintAccount();
+    anfrageRegister.reset();
+    authStatus(anfrageRegister, "", false);
+    syncInquiry(user);
+  } catch (error) {
+    authStatus(anfrageRegister, error.message, true);
+  }
+});
+
+syncInquiry(window.BauRominia?.session());
 
 form?.addEventListener("submit", (event) => {
   event.preventDefault();
   const status = form.querySelector("[data-status]");
+  const active = window.BauRominia?.session();
+  if (!active) {
+    syncInquiry(null);
+    return;
+  }
   if (!form.checkValidity()) {
     form.reportValidity();
     status.textContent = "Bitte die markierten Felder ausfüllen.";
@@ -84,14 +181,14 @@ form?.addEventListener("submit", (event) => {
   }
 
   const data = Object.fromEntries(new FormData(form).entries());
-  const active = window.BauRominia?.session();
-  if (active) data.konto = active.email;
+  data.konto = active.email;
+  data.email = active.email;
   const saved = JSON.parse(localStorage.getItem("bau-rominia-anfragen") || "[]");
   saved.push({ ...data, zeit: new Date().toISOString() });
   localStorage.setItem("bau-rominia-anfragen", JSON.stringify(saved));
 
   form.reset();
-  setAudience("auftrag");
+  syncInquiry(active);
   status.classList.remove("is-error");
   status.textContent = "Gemerkt. Die Anfrage liegt lokal in diesem Browser.";
 });

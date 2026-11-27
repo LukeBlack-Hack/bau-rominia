@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Anfragen — Bau Rominia</title>
+    <meta name="description" content="Alle Anfragen aus diesem Browser, nur für den Besitzer." />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#inhalt">Zum Inhalt</a>
+    <header class="site-header" data-header>
+      <a class="wordmark" href="index.html">
+        <span class="mark" aria-hidden="true"></span>
+        Bau Rominia
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav" data-nav-toggle>
+        Menü
+      </button>
+      <nav id="nav" class="nav" data-nav>
+        <a href="index.html#leistungen">Leistungen</a>
+        <a href="index.html#anfrage">Anfrage</a>
+        <a href="anfragen.html" data-intern hidden aria-current="page">Anfragen</a>
+        <a href="kalkulation.html" data-intern hidden>Kalkulation</a>
+        <a class="nav-account" href="konto.html" data-account>Anmelden</a>
+      </nav>
+    </header>
+
+    <main class="page page-calc" id="inhalt">
+      <div data-lock>
+        <p class="kicker">Intern</p>
+        <h1>Nur für den Besitzer.</h1>
+        <p class="section-lead">
+          Die Anfragen liegen auf dieser Seite. Im Menü erscheint sie erst nach der Anmeldung als Besitzer.
+        </p>
+        <a class="btn btn-solid" href="konto.html#besitzer">Als Besitzer anmelden</a>
+      </div>
+
+      <div data-office hidden>
+        <p class="kicker">Intern · Besitzer</p>
+        <h1>Anfragen.</h1>
+        <p class="section-lead">
+          Alles, was über das Formular auf der Seite gemerkt wurde. Von hier aus geht eine Anfrage
+          direkt in die Kalkulation. Ein angehängtes Angebot zeigt nur die Kundenfassung, in diesem Browser.
+        </p>
+        <div class="anfrage-list" data-anfragen></div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Bau Rominia</strong>
+        <p>Hilfen für Kammersteine, Gleisarbeiten, Schotter und Rheda City.</p>
+      </div>
+      <p class="fine">
+        <a href="anfragen.html" data-intern hidden>Anfragen</a>
+        <a href="kalkulation.html" data-intern hidden>Kalkulation</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </p>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/anfragen.js"></script>
+  </body>
+</html>
