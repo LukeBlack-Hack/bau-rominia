@@ -474,10 +474,12 @@ h3 {
 }
 
 .qr {
-  width: 196px;
-  height: 196px;
+  width: auto;
+  height: auto;
+  max-width: 100%;
   justify-self: center;
-  background: #f6f1e7;
+  background: #fff;
+  image-rendering: pixelated;
 }
 
 .app-key,

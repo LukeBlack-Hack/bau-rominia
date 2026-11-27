@@ -17,8 +17,25 @@
     canvas.className = "qr";
     canvas.setAttribute("role", "img");
     canvas.setAttribute("aria-label", "QR-Code für die Authenticator-App");
-    const url = `otpauth://totp/${encodeURIComponent("Bau Rominia")}:${encodeURIComponent(email)}?secret=${encodeURIComponent(geheimnis)}&issuer=${encodeURIComponent("Bau Rominia")}`;
-    window.BauQr.zeichne(canvas, url);
+    const url = `otpauth://totp/${encodeURIComponent("Bau Rominia")}:${encodeURIComponent(email)}?secret=${geheimnis}&issuer=${encodeURIComponent("Bau Rominia")}`;
+    const code = qrcode(0, "M");
+    code.addData(url, "Byte");
+    code.make();
+    const modules = code.getModuleCount();
+    const quiet = 4;
+    const scale = 6;
+    canvas.width = (modules + quiet * 2) * scale;
+    canvas.height = canvas.width;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    for (let y = 0; y < modules; y += 1) {
+      for (let x = 0; x < modules; x += 1) {
+        if (!code.isDark(y, x)) continue;
+        ctx.fillRect((x + quiet) * scale, (y + quiet) * scale, scale, scale);
+      }
+    }
     const key = document.createElement("p");
     key.className = "app-key";
     key.textContent = geheimnis;
