@@ -118,36 +118,4 @@ gateIn.querySelector("[data-logout]").addEventListener("click", () => {
   showSession();
 });
 
-const besitzerForm = document.querySelector("[data-besitzer]");
-const besitzerBox = document.querySelector("#besitzer");
-if (besitzerBox && location.hash === "#besitzer") {
-  besitzerBox.open = true;
-}
-
-besitzerForm?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  if (!besitzerForm.checkValidity()) {
-    besitzerForm.reportValidity();
-    return;
-  }
-  const data = Object.fromEntries(new FormData(besitzerForm).entries());
-  if (data.password.length < 6) {
-    setStatus(besitzerForm, "Das Passwort braucht mindestens 6 Zeichen.", true);
-    return;
-  }
-  if (data.password !== data.password2) {
-    setStatus(besitzerForm, "Die beiden Passwörter sind nicht gleich.", true);
-    return;
-  }
-  try {
-    await auth.register({ ...data, rolle: "besitzer", firma: "" });
-    auth.paintAccount();
-    besitzerForm.reset();
-    setStatus(besitzerForm, "", false);
-    showSession();
-  } catch (error) {
-    setStatus(besitzerForm, error.message, true);
-  }
-});
-
 showSession();
