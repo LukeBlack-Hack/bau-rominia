@@ -224,6 +224,10 @@
                 Passwort
                 <input name="password" type="password" autocomplete="current-password" required />
               </label>
+              <label data-code-feld hidden>
+                Code aus der App
+                <input name="code" inputmode="text" autocomplete="one-time-code" disabled />
+              </label>
               <button class="auth-forget" type="button" data-auth-tab="reset">Passwort vergessen</button>
               <div class="form-row">
                 <button class="btn btn-solid" type="submit">Anmelden</button>
@@ -235,19 +239,24 @@
               <p class="kicker">Neues Passwort</p>
               <h2>Passwort vergessen.</h2>
               <p class="hint">
-                Nur auf diesem Computer. Es geht keine E-Mail raus. Die Adresse muss hier schon ein Konto haben.
+                Nur auf diesem Computer, mit dem Code aus der Authenticator-App oder einem Notfallcode.
+                Es geht keine E-Mail raus.
               </p>
               <label>
                 E-Mail
                 <input name="email" type="email" autocomplete="username" required />
               </label>
               <label>
+                Code aus der App
+                <input name="code" inputmode="text" autocomplete="one-time-code" required />
+              </label>
+              <label>
                 Neues Passwort
-                <input name="password" type="password" autocomplete="new-password" minlength="6" required />
+                <input name="password" type="password" autocomplete="new-password" minlength="8" required />
               </label>
               <label>
                 Passwort wiederholen
-                <input name="password2" type="password" autocomplete="new-password" minlength="6" required />
+                <input name="password2" type="password" autocomplete="new-password" minlength="8" required />
               </label>
               <div class="form-row">
                 <button class="btn btn-solid" type="submit">Passwort speichern</button>
@@ -284,17 +293,18 @@
               </label>
               <label>
                 Passwort
-                <input name="password" type="password" autocomplete="new-password" minlength="6" required />
+                <input name="password" type="password" autocomplete="new-password" minlength="8" required />
               </label>
               <label>
                 Passwort wiederholen
-                <input name="password2" type="password" autocomplete="new-password" minlength="6" required />
+                <input name="password2" type="password" autocomplete="new-password" minlength="8" required />
               </label>
               <div class="form-row">
                 <button class="btn btn-solid" type="submit">Konto erstellen</button>
                 <p class="form-status" data-status role="status"></p>
               </div>
             </form>
+            <div data-app hidden></div>
           </div>
         </div>
 
@@ -474,7 +484,10 @@
       </p>
     </footer>
 
+    <script src="js/sicherheit.js"></script>
+    <script src="js/qr.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/einrichten.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>

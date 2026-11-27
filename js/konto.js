@@ -76,11 +76,22 @@ loginForm.addEventListener("submit", async (event) => {
   }
   const data = Object.fromEntries(new FormData(loginForm).entries());
   try {
-    await auth.login(data);
-    auth.paintAccount();
-    loginForm.reset();
-    setStatus(loginForm, "", false);
-    showSession();
+    const ergebnis = await auth.login(data);
+    await window.BauEinrichten.weiter(ergebnis, {
+      panel: loginForm.closest(".auth-panel"),
+      status: (text, isError) => setStatus(loginForm, text, isError),
+      onFertig: () => {
+        auth.paintAccount();
+        loginForm.reset();
+        const codeFeld = loginForm.querySelector("[data-code-feld]");
+        if (codeFeld) {
+          codeFeld.hidden = true;
+          codeFeld.querySelector("input").disabled = true;
+        }
+        setStatus(loginForm, "", false);
+        showSession();
+      },
+    });
   } catch (error) {
     setStatus(loginForm, error.message, true);
   }
@@ -94,8 +105,8 @@ registerForm.addEventListener("submit", async (event) => {
   }
   const data = Object.fromEntries(new FormData(registerForm).entries());
   data.rolle = data.rolle === "fachkraft" ? "fachkraft" : "auftrag";
-  if (data.password.length < 6) {
-    setStatus(registerForm, "Das Passwort braucht mindestens 6 Zeichen.", true);
+  if (data.password.length < 8) {
+    setStatus(registerForm, "Das Passwort braucht mindestens 8 Zeichen.", true);
     return;
   }
   if (data.password !== data.password2) {
@@ -103,11 +114,17 @@ registerForm.addEventListener("submit", async (event) => {
     return;
   }
   try {
-    await auth.register(data);
-    auth.paintAccount();
-    registerForm.reset();
-    setStatus(registerForm, "", false);
-    showSession();
+    const ergebnis = await auth.register(data);
+    await window.BauEinrichten.weiter(ergebnis, {
+      panel: registerForm.closest(".auth-panel"),
+      status: (text, isError) => setStatus(registerForm, text, isError),
+      onFertig: () => {
+        auth.paintAccount();
+        registerForm.reset();
+        setStatus(registerForm, "", false);
+        showSession();
+      },
+    });
   } catch (error) {
     setStatus(registerForm, error.message, true);
   }

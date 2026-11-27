@@ -27,6 +27,10 @@ document.querySelectorAll(".auth-panel").forEach((panel) => {
     panel.querySelectorAll("[data-auth-pane]").forEach((pane) => {
       pane.hidden = pane.dataset.authPane !== name;
     });
+    const app = panel.querySelector("[data-app]");
+    if (app) app.hidden = true;
+    const schalter = panel.querySelector(".switch");
+    if (schalter) schalter.hidden = false;
   };
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => showAuth(tab.dataset.authTab));
@@ -153,11 +157,22 @@ anfrageLogin?.addEventListener("submit", async (event) => {
     return;
   }
   try {
-    const user = await window.BauRominia.login(Object.fromEntries(new FormData(anfrageLogin).entries()));
-    window.BauRominia.paintAccount();
-    anfrageLogin.reset();
-    authStatus(anfrageLogin, "", false);
-    syncInquiry(user);
+    const ergebnis = await window.BauRominia.login(Object.fromEntries(new FormData(anfrageLogin).entries()));
+    await window.BauEinrichten.weiter(ergebnis, {
+      panel: anfrageLogin.closest(".auth-panel"),
+      status: (text, isError) => authStatus(anfrageLogin, text, isError),
+      onFertig: (user) => {
+        window.BauRominia.paintAccount();
+        anfrageLogin.reset();
+        const codeFeld = anfrageLogin.querySelector("[data-code-feld]");
+        if (codeFeld) {
+          codeFeld.hidden = true;
+          codeFeld.querySelector("input").disabled = true;
+        }
+        authStatus(anfrageLogin, "", false);
+        syncInquiry(user);
+      },
+    });
   } catch (error) {
     authStatus(anfrageLogin, error.message, true);
   }
@@ -171,8 +186,8 @@ anfrageRegister?.addEventListener("submit", async (event) => {
   }
   const data = Object.fromEntries(new FormData(anfrageRegister).entries());
   data.rolle = data.rolle === "fachkraft" ? "fachkraft" : "auftrag";
-  if (data.password.length < 6) {
-    authStatus(anfrageRegister, "Das Passwort braucht mindestens 6 Zeichen.", true);
+  if (data.password.length < 8) {
+    authStatus(anfrageRegister, "Das Passwort braucht mindestens 8 Zeichen.", true);
     return;
   }
   if (data.password !== data.password2) {
@@ -180,11 +195,17 @@ anfrageRegister?.addEventListener("submit", async (event) => {
     return;
   }
   try {
-    const user = await window.BauRominia.register(data);
-    window.BauRominia.paintAccount();
-    anfrageRegister.reset();
-    authStatus(anfrageRegister, "", false);
-    syncInquiry(user);
+    const ergebnis = await window.BauRominia.register(data);
+    await window.BauEinrichten.weiter(ergebnis, {
+      panel: anfrageRegister.closest(".auth-panel"),
+      status: (text, isError) => authStatus(anfrageRegister, text, isError),
+      onFertig: (user) => {
+        window.BauRominia.paintAccount();
+        anfrageRegister.reset();
+        authStatus(anfrageRegister, "", false);
+        syncInquiry(user);
+      },
+    });
   } catch (error) {
     authStatus(anfrageRegister, error.message, true);
   }
